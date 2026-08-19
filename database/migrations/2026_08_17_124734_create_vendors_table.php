@@ -13,11 +13,18 @@ return new class extends Migration
     {
         Schema::create('vendors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+
+            $table->string('name');
+
+            $table->foreignId('user_id')
+                ->unique()
+                ->constrained('users')
+                ->cascadeOnDelete();
 
             $table->string('shop_name');
             $table->string('slug')->unique();
-            $table->string('contact');
+
+            $table->string('contact', 20);
             $table->string('email')->unique();
 
             $table->string('pan_no')->unique();
@@ -26,10 +33,15 @@ return new class extends Migration
             $table->string('banner')->nullable();
             $table->text('description')->nullable();
 
-            $table->enum('status', ['pending', 'approved', 'rejected', 'suspended'])
-                ->default('pending');
+            $table->enum('status', [
+                'pending',
+                'approved',
+                'rejected',
+                'suspended'
+            ])->default('pending');
 
-            $table->decimal('commission_rate', 5, 2)->default(0);
+            $table->decimal('commission_rate', 5, 2)
+                ->default(0);
 
             $table->timestamp('approved_at')->nullable();
 

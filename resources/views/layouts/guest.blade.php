@@ -1,3 +1,4 @@
+<!-- resources/views/layouts/guest.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,13 +14,16 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <link rel="stylesheet" href="{{ asset('frontend/main.css') }}">
+    @stack('styles')
 </head>
 
 <body>
 
-    <main>
-        {{ $slot }}
+    <main style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--color-bg-light); padding: var(--spacing-2xl) 0;">
+        @yield('content')
     </main>
+
+    @stack('scripts')
 
 </body>
 

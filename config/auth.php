@@ -44,11 +44,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-         'admin' => [
+        'admins' => [
             'driver' => 'session',
             'provider' => 'admins',
         ],
-         'vendor' => [
+        'vendors' => [
             'driver' => 'session',
             'provider' => 'vendors',
         ],
@@ -82,7 +82,7 @@ return [
         ],
         'vendors' => [
             'driver' => 'eloquent',
-            'model' =>Vendor::class,
+            'model' => Vendor::class,
         ],
 
         // 'users' => [
@@ -117,13 +117,13 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-        'admin' => [
+        'admins' => [
             'provider' => 'admins',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
         ],
-        'vendor' => [
+        'vendors' => [
             'provider' => 'vendors',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,

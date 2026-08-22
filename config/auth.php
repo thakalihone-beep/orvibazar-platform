@@ -2,7 +2,6 @@
 
 use App\Models\Admin;
 use App\Models\User;
-use App\Models\Vendor;
 
 return [
 
@@ -82,7 +81,7 @@ return [
         ],
         'vendors' => [
             'driver' => 'eloquent',
-            'model' => Vendor::class,
+            'model' => User::class,
         ],
 
         // 'users' => [

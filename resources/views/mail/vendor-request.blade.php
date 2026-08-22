@@ -1,79 +1,159 @@
-<!-- resources/views/mail/vendor_request.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Vendor Registration Request</title>
+
+    <title>New Vendor Application - OrviBazar</title>
+
     <style>
-        /* Email-specific styles */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            background-color: #f4f6f8;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            color: #17202a;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        img {
+            border: 0;
+            max-width: 100%;
         }
 
         .email-wrapper {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
+            width: 100%;
+            padding: 40px 15px;
+            background-color: #f4f6f8;
         }
 
         .email-container {
-            background: #ffffff;
-            border-radius: 12px;
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
         }
 
-        .email-header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            padding: 30px 40px;
-            text-align: center;
-            border-bottom: 4px solid #e8a838;
+        /* ================================
+           HEADER
+        ================================= */
+
+        .header {
+            background-color: #171717;
+            padding: 32px 40px;
         }
 
-        .email-header h1 {
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
             color: #ffffff;
-            font-size: 24px;
+        }
+
+        .brand span {
+            color: #60a5fa;
+        }
+
+        .header-label {
+            margin-top: 24px;
+            font-size: 12px;
             font-weight: 700;
-            margin: 0;
-            letter-spacing: 1px;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: #94a3b8;
         }
 
-        .email-header p {
-            color: #e8a838;
+        .header-title {
+            margin: 7px 0 0;
+            color: #ffffff;
+            font-size: 25px;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        .header-description {
+            margin: 10px 0 0;
+            color: #cbd5e1;
             font-size: 14px;
-            margin: 8px 0 0 0;
-            opacity: 0.9;
+            line-height: 1.6;
         }
 
-        .email-body {
-            padding: 40px;
+        /* ================================
+           BODY
+        ================================= */
+
+        .body {
+            padding: 38px 40px;
         }
 
-        .email-body h2 {
-            color: #1a1a1a;
+        .intro-title {
+            margin: 0 0 8px;
             font-size: 20px;
-            margin-top: 0;
-            border-bottom: 2px solid #e8a838;
-            padding-bottom: 10px;
+            font-weight: 700;
+            color: #111827;
         }
 
-        .vendor-details {
-            background: #f8f8f8;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
+        .intro-text {
+            margin: 0 0 28px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #64748b;
+        }
+
+        /* ================================
+           STATUS
+        ================================= */
+
+        .status-box {
+            margin-bottom: 28px;
+            padding: 16px 18px;
+            background-color: #eff6ff;
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+        }
+
+        .status-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .status-value {
+            margin-top: 5px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        /* ================================
+           DETAILS
+        ================================= */
+
+        .section-title {
+            margin: 0 0 14px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .details {
+            width: 100%;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         .detail-row {
-            display: flex;
-            padding: 8px 0;
-            border-bottom: 1px solid #e8e8e8;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .detail-row:last-child {
@@ -81,280 +161,447 @@
         }
 
         .detail-label {
+            width: 38%;
+            padding: 14px 16px;
+            background-color: #f8fafc;
+            color: #64748b;
+            font-size: 13px;
             font-weight: 600;
-            width: 140px;
-            color: #555555;
-            flex-shrink: 0;
+            vertical-align: top;
         }
 
         .detail-value {
-            color: #1a1a1a;
-            flex: 1;
+            padding: 14px 16px;
+            color: #111827;
+            font-size: 13px;
+            vertical-align: top;
+            word-break: break-word;
         }
 
         .status-badge {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            padding: 5px 10px;
+            background-color: #fff7ed;
+            color: #c2410c;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
             text-transform: uppercase;
-            background: #f39c12;
-            color: #ffffff;
+            letter-spacing: 0.4px;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin: 25px 0 20px 0;
-            flex-wrap: wrap;
+        /* ================================
+           ACTION BOX
+        ================================= */
+
+        .action-box {
+            margin-top: 30px;
+            padding: 22px;
+            background-color: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
         }
 
-        .btn {
+        .action-title {
+            margin: 0 0 7px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .action-text {
+            margin: 0 0 18px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #64748b;
+        }
+
+        .button {
             display: inline-block;
-            padding: 12px 24px;
-            border-radius: 6px;
+            padding: 12px 22px;
+            background-color: #171717;
+            color: #ffffff !important;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            text-align: center;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 700;
         }
 
-        .btn-primary {
-            background: #1a1a1a;
-            color: #ffffff;
+        .button:hover {
+            background-color: #262626;
         }
 
-        .btn-primary:hover {
-            background: #2d2d2d;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        /* ================================
+           SECURITY
+        ================================= */
+
+        .security-box {
+            margin-top: 25px;
+            padding: 16px 18px;
+            border-left: 3px solid #2563eb;
+            background-color: #f8fafc;
         }
 
-        .btn-accent {
-            background: #e8a838;
-            color: #1a1a1a;
+        .security-title {
+            margin: 0 0 5px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #334155;
         }
 
-        .btn-accent:hover {
-            background: #f0c04a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(232,168,56,0.3);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: #1a1a1a;
-            border: 2px solid #1a1a1a;
-        }
-
-        .btn-outline:hover {
-            background: #1a1a1a;
-            color: #ffffff;
-        }
-
-        .admin-note {
-            background: #fff3cd;
-            border-left: 4px solid #f39c12;
-            padding: 15px 20px;
-            border-radius: 4px;
-            margin: 20px 0;
-        }
-
-        .admin-note p {
+        .security-text {
             margin: 0;
-            color: #856404;
-            font-size: 14px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #64748b;
         }
 
-        .admin-note i {
-            margin-right: 8px;
-        }
+        /* ================================
+           FOOTER
+        ================================= */
 
         .footer {
-            padding: 20px 40px;
-            background: #f8f8f8;
+            padding: 25px 40px;
+            background-color: #fafafa;
+            border-top: 1px solid #e5e7eb;
             text-align: center;
-            border-top: 1px solid #e8e8e8;
         }
 
-        .footer p {
+        .footer-brand {
+            margin: 0 0 7px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .footer-text {
             margin: 4px 0;
-            font-size: 13px;
-            color: #777777;
+            font-size: 11px;
+            line-height: 1.6;
+            color: #94a3b8;
         }
 
         .footer a {
-            color: #1a1a1a;
+            color: #2563eb;
             text-decoration: none;
-            font-weight: 600;
         }
 
-        .footer a:hover {
-            color: #e8a838;
-        }
+        /* ================================
+           MOBILE
+        ================================= */
 
-        .logo-text {
-            font-size: 28px;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: 2px;
-        }
+        @media only screen and (max-width: 600px) {
 
-        .logo-text span {
-            color: #e8a838;
-        }
-
-        .divider {
-            height: 1px;
-            background: #e8e8e8;
-            margin: 20px 0;
-        }
-
-        @media (max-width: 480px) {
-            .email-body {
-                padding: 20px;
+            .email-wrapper {
+                padding: 15px 10px;
             }
 
-            .detail-row {
-                flex-direction: column;
-                padding: 12px 0;
+            .header {
+                padding: 28px 24px;
+            }
+
+            .body {
+                padding: 28px 22px;
+            }
+
+            .footer {
+                padding: 22px;
+            }
+
+            .header-title {
+                font-size: 21px;
+            }
+
+            .detail-label,
+            .detail-value {
+                display: block;
+                width: auto;
+                padding: 10px 14px;
             }
 
             .detail-label {
-                width: 100%;
-                margin-bottom: 4px;
+                padding-bottom: 4px;
+                border-bottom: 0;
             }
 
-            .action-buttons {
-                flex-direction: column;
+            .detail-value {
+                padding-top: 4px;
             }
 
-            .btn {
-                width: 100%;
+            .button {
+                display: block;
                 text-align: center;
-            }
-
-            .email-header h1 {
-                font-size: 20px;
             }
         }
     </style>
 </head>
+
 <body>
-    <div class="email-wrapper">
-        <div class="email-container">
 
-            <!-- Email Header -->
-            <div class="email-header">
-                <div class="logo-text">Orvi<span>Bazar</span></div>
-                <h1>New Vendor Registration Request</h1>
-                <p>Action Required: Review Vendor Application</p>
-            </div>
+    <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+        <tr>
+            <td>
 
-            <!-- Email Body -->
-            <div class="email-body">
+                <div class="email-wrapper">
 
-                <h2>📋 Vendor Application Details</h2>
+                    <table class="email-container" cellpadding="0" cellspacing="0" role="presentation">
 
-                <p style="color: #555; margin-bottom: 20px;">
-                    A new vendor has submitted a registration request. Please review the details below and take appropriate action.
-                </p>
+                        <!-- =====================================
+                             HEADER
+                        ====================================== -->
 
-                <!-- Vendor Details -->
-                <div class="vendor-details">
-                    <div class="detail-row">
-                        <span class="detail-label">Vendor Name</span>
-                        <span class="detail-value"><strong>{{ $vendor->name ?? 'N/A' }}</strong></span>
-                    </div>
+                        <tr>
+                            <td class="header">
 
-                    <div class="detail-row">
-                        <span class="detail-label">Shop Name</span>
-                        <span class="detail-value"><strong>{{ $vendor->shop_name ?? 'N/A' }}</strong></span>
-                    </div>
+                                <div class="brand">
+                                    Orvi<span>Bazar</span>
+                                </div>
 
-                    <div class="detail-row">
-                        <span class="detail-label">Email Address</span>
-                        <span class="detail-value">{{ $vendor->email ?? 'N/A' }}</span>
-                    </div>
+                                <div class="header-label">
+                                    Vendor Management
+                                </div>
 
-                    <div class="detail-row">
-                        <span class="detail-label">Contact Number</span>
-                        <span class="detail-value">{{ $vendor->contact ?? 'N/A' }}</span>
-                    </div>
+                                <div class="header-title">
+                                    New Vendor Application
+                                </div>
 
-                    <div class="detail-row">
-                        <span class="detail-label">PAN Number</span>
-                        <span class="detail-value">{{ $vendor->pan_no ?? 'N/A' }}</span>
-                    </div>
+                                <div class="header-description">
+                                    A new vendor has submitted an application
+                                    and is waiting for administrative review.
+                                </div>
 
-                    <div class="detail-row">
-                        <span class="detail-label">Status</span>
-                        <span class="detail-value">
-                            <span class="status-badge">{{ $vendor->status ?? 'Pending' }}</span>
-                        </span>
-                    </div>
+                            </td>
+                        </tr>
 
-                    <div class="detail-row">
-                        <span class="detail-label">Submitted On</span>
-                        <span class="detail-value">{{ $vendor->created_at ? $vendor->created_at->format('F d, Y h:i A') : 'N/A' }}</span>
-                    </div>
 
-                    @if($vendor->description)
-                        <div class="detail-row">
-                            <span class="detail-label">Shop Description</span>
-                            <span class="detail-value">{{ $vendor->description }}</span>
-                        </div>
-                    @endif
+                        <!-- =====================================
+                             BODY
+                        ====================================== -->
+
+                        <tr>
+                            <td class="body">
+
+                                <h2 class="intro-title">
+                                    Vendor application received
+                                </h2>
+
+                                <p class="intro-text">
+                                    A new vendor has registered on OrviBazar.
+                                    Please review the application details below
+                                    before approving or rejecting the account.
+                                </p>
+
+
+                                <!-- STATUS -->
+
+                                <div class="status-box">
+
+                                    <div class="status-label">
+                                        Application Status
+                                    </div>
+
+                                    <div class="status-value">
+                                        Pending Review
+                                    </div>
+
+                                </div>
+
+
+                                <!-- DETAILS -->
+
+                                <div class="section-title">
+                                    Vendor Information
+                                </div>
+
+                                <table class="details"
+                                       width="100%"
+                                       cellpadding="0"
+                                       cellspacing="0"
+                                       role="presentation">
+
+                                    <tr class="detail-row">
+                                        <td class="detail-label">
+                                            Vendor Name
+                                        </td>
+
+                                        <td class="detail-value">
+                                            <strong>
+                                                {{ $vendor->name ?? 'N/A' }}
+                                            </strong>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr class="detail-row">
+                                        <td class="detail-label">
+                                            Shop Name
+                                        </td>
+
+                                        <td class="detail-value">
+                                            <strong>
+                                                {{ $vendor->shop_name ?? 'N/A' }}
+                                            </strong>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr class="detail-row">
+                                        <td class="detail-label">
+                                            Email Address
+                                        </td>
+
+                                        <td class="detail-value">
+                                            {{ $vendor->email ?? 'N/A' }}
+                                        </td>
+                                    </tr>
+
+
+                                    <tr class="detail-row">
+                                        <td class="detail-label">
+                                            Contact Number
+                                        </td>
+
+                                        <td class="detail-value">
+                                            {{ $vendor->contact ?? 'N/A' }}
+                                        </td>
+                                    </tr>
+
+
+                                    <tr class="detail-row">
+                                        <td class="detail-label">
+                                            PAN Number
+                                        </td>
+
+                                        <td class="detail-value">
+                                            {{ $vendor->pan_no ?? 'N/A' }}
+                                        </td>
+                                    </tr>
+
+
+                                    <tr class="detail-row">
+                                        <td class="detail-label">
+                                            Status
+                                        </td>
+
+                                        <td class="detail-value">
+                                            <span class="status-badge">
+                                                {{ ucfirst($vendor->status ?? 'pending') }}
+                                            </span>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr class="detail-row">
+                                        <td class="detail-label">
+                                            Submitted
+                                        </td>
+
+                                        <td class="detail-value">
+                                            {{ $vendor->created_at
+                                                ? $vendor->created_at->format('M d, Y • h:i A')
+                                                : 'N/A'
+                                            }}
+                                        </td>
+                                    </tr>
+
+
+                                    @if($vendor->description)
+
+                                        <tr class="detail-row">
+
+                                            <td class="detail-label">
+                                                Description
+                                            </td>
+
+                                            <td class="detail-value">
+                                                {{ $vendor->description }}
+                                            </td>
+
+                                        </tr>
+
+                                    @endif
+
+                                </table>
+
+
+                                <!-- ADMIN ACTION -->
+
+                                <div class="action-box">
+
+                                    <p class="action-title">
+                                        Review this application
+                                    </p>
+
+                                    <p class="action-text">
+                                        Open the vendor management panel to
+                                        review the application and take the
+                                        appropriate action.
+                                    </p>
+
+                                    <a
+                                        href="{{ url('/admin/vendors/' . $vendor->id . '/edit') }}"
+                                        class="button"
+                                    >
+                                        Review Vendor Application
+                                    </a>
+
+                                </div>
+
+
+                                <!-- SECURITY -->
+
+                                <div class="security-box">
+
+                                    <p class="security-title">
+                                        Security reminder
+                                    </p>
+
+                                    <p class="security-text">
+                                        Verify the vendor's information and
+                                        submitted documents before approving
+                                        the application. This is an automated
+                                        administrative notification from
+                                        OrviBazar.
+                                    </p>
+
+                                </div>
+
+                            </td>
+                        </tr>
+
+
+                        <!-- =====================================
+                             FOOTER
+                        ====================================== -->
+
+                        <tr>
+                            <td class="footer">
+
+                                <p class="footer-brand">
+                                    OrviBazar Vendor Management
+                                </p>
+
+                                <p class="footer-text">
+                                    This notification was sent automatically
+                                    to the OrviBazar administration team.
+                                </p>
+
+                                <p class="footer-text">
+                                    &copy; {{ date('Y') }} OrviBazar.
+                                    All rights reserved.
+                                </p>
+
+                            </td>
+                        </tr>
+
+                    </table>
+
                 </div>
 
-                <!-- Admin Note -->
-                <div class="admin-note">
-                    <p>
-                        <i class="fas fa-info-circle"></i>
-                        <strong>Action Required:</strong> Please review this vendor application and either approve or reject it.
-                        This vendor is currently awaiting approval and cannot start selling until their account is activated.
-                    </p>
-                </div>
+            </td>
+        </tr>
+    </table>
 
-                <!-- Admin Dashboard -->
-                <div style="text-align: center;">
-                    <a href="{{ route('filament.admin.pages.dashboard') }}" class="btn btn-primary">
-                        <i class="fas fa-eye"></i> Open Admin Dashboard
-                    </a>
-                </div>
-
-                <div class="divider"></div>
-
-                <!-- Additional Info -->
-                <div style="background: #f8f8f8; padding: 15px; border-radius: 6px;">
-                    <p style="margin: 0; font-size: 13px; color: #555;">
-                        <i class="fas fa-shield-alt" style="color: #e8a838;"></i>
-                        <strong>Security Note:</strong> This is an automated notification. Please verify the vendor's identity and
-                        documents before approving their application.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="footer">
-                <p>
-                    <strong>OrviBazar</strong> - Vendor Management System
-                </p>
-                <p>
-                    &copy; {{ date('Y') }} OrviBazar. All rights reserved.
-                </p>
-                <p style="font-size: 12px; color: #999;">
-                    This email was sent to the admin team for vendor approval.
-                    If you have any questions, please contact the support team.
-                </p>
-                <p style="margin-top: 10px;">
-                    <a href="{{ route('filament.admin.pages.dashboard') }}">Go to Admin Dashboard</a>
-                </p>
-            </div>
-
-        </div>
-    </div>
 </body>
+
 </html>

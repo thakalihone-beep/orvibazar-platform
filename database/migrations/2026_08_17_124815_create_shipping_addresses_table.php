@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')
                 ->constrained('users')
-                ->cascadeOnDelete(); //If the parent record is deleted, automatically delete the related child records too
+                ->cascadeOnDelete(); // If the parent record is deleted, automatically delete the related child records too
             $table->string('full_name');
             $table->string('phone');
             $table->string('address_line');

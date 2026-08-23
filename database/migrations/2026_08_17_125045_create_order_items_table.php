@@ -39,7 +39,7 @@ return new class extends Migration
                 'pending',
                 'packed',
                 'shipped',
-                'delivered'
+                'delivered',
             ])->default('pending');
 
             $table->timestamps();

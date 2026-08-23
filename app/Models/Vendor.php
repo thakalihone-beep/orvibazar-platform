@@ -67,7 +67,7 @@ class Vendor extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);  //User refers to app/Models/User.php
+        return $this->belongsTo(User::class);  // User refers to app/Models/User.php
     }
 
     /*

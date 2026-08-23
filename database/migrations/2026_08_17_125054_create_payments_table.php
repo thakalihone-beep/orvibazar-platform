@@ -23,11 +23,10 @@ return new class extends Migration
                 'esewa',
                 'khalti',
                 'card',
-                'bank_transfer'
+                'bank_transfer',
             ]);
 
             $table->string('transaction_id')->unique()->nullable();
-
 
             $table->decimal('amount', 10, 2);
 
@@ -35,7 +34,7 @@ return new class extends Migration
                 'pending',
                 'completed',
                 'failed',
-                'refunded'
+                'refunded',
             ])->default('pending');
 
             $table->timestamp('paid_at')->nullable();

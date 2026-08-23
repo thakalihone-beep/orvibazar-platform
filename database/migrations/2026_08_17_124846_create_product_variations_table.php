@@ -24,7 +24,7 @@ return new class extends Migration
 
             $table->unsignedInteger('stock_qty')->default(0);
 
-            $table->string('sku')->unique(); //Stock Keeping Unit.
+            $table->string('sku')->unique(); // Stock Keeping Unit.
             $table->timestamps();
         });
     }

@@ -36,13 +36,13 @@ return new class extends Migration
                 'shipped',
                 'delivered',
                 'cancelled',
-                'returned'
+                'returned',
             ])->default('pending');
 
             $table->enum('payment_status', [
                 'unpaid',
                 'paid',
-                'refunded'
+                'refunded',
             ])->default('unpaid');
 
             $table->timestamps();

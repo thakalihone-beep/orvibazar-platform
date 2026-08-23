@@ -37,7 +37,7 @@ return new class extends Migration
                 'pending',
                 'approved',
                 'rejected',
-                'suspended'
+                'suspended',
             ])->default('pending');
 
             $table->decimal('commission_rate', 5, 2)

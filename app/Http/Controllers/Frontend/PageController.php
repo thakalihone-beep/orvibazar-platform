@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
@@ -11,5 +10,4 @@ class PageController extends Controller
     {
         return view('frontend.home');
     }
-
 }

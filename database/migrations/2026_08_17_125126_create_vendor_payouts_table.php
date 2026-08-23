@@ -30,7 +30,7 @@ return new class extends Migration
                 'pending',
                 'processing',
                 'paid',
-                'failed'
+                'failed',
             ])->default('pending');
 
             $table->string('transaction_id')->nullable()->unique();

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Vendors\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -14,25 +15,30 @@ class VendorsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
+                ImageColumn::make('logo')
+                    ->label('Logo')
+                    ->disk('public')
+                    ->circular()
+                    ->defaultImageUrl(url('/images/default-avatar.png')),
                 TextColumn::make('shop_name')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('bold'),
+                TextColumn::make('name')
+                    ->label('Owner Name')
                     ->searchable(),
-                TextColumn::make('slug')
+                ImageColumn::make('banner')
+                    ->label('Banner')
+                    ->disk('public')
+                    ->square()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('email')
+                    ->label('Email Address')
                     ->searchable(),
                 TextColumn::make('contact')
                     ->searchable(),
-                TextColumn::make('email')
-                    ->label('Email address')
-                    ->searchable(),
                 TextColumn::make('pan_no')
-                    ->searchable(),
-                TextColumn::make('logo')
-                    ->searchable(),
-                TextColumn::make('banner')
+                    ->label('PAN No.')
                     ->searchable(),
                 TextColumn::make('status')
                     ->badge(),

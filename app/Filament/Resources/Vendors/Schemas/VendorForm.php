@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Vendors\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -31,9 +32,15 @@ class VendorForm
                     ->required(),
                 TextInput::make('pan_no')
                     ->required(),
-                TextInput::make('logo')
+                FileUpload::make('logo')
+                    ->image()
+                    ->disk('public')
+                    ->directory('vendors/logos')
                     ->default(null),
-                TextInput::make('banner')
+                FileUpload::make('banner')
+                    ->image()
+                    ->disk('public')
+                    ->directory('vendors/banners')
                     ->default(null),
                 Textarea::make('description')
                     ->default(null)

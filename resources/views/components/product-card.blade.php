@@ -1,4 +1,4 @@
-{{-- @props([
+@props([
     'product' => null,
     'image' => null,
     'title' => null,
@@ -576,4 +576,4 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
-</script> --}}
+</script>

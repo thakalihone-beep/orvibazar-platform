@@ -74,11 +74,58 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * Product reviews.
+     *
+     * products.id -> reviews.product_id
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
-    | Helper Methods
+    | Helper Methods & Accessors
     |--------------------------------------------------------------------------
     */
+
+    /**
+     * Get the primary image URL.
+     */
+    public function getImageUrlAttribute(): string
+    {
+        if (! empty($this->images) && is_array($this->images)) {
+            $first = $this->images[0];
+            if (str_starts_with($first, 'http://') || str_starts_with($first, 'https://')) {
+                return $first;
+            }
+
+            return asset('storage/' . ltrim($first, '/'));
+        }
+
+        return 'https://via.placeholder.com/400x400/1a1a1a/ffffff?text=' . urlencode($this->name);
+    }
+
+    /**
+     * Get the stock status string.
+     */
+    public function getStockStatusAttribute(): string
+    {
+        if ($this->isOutOfStock()) {
+            return 'out-of-stock';
+        }
+
+        return $this->stock_qty <= 5 ? 'low-stock' : 'in-stock';
+    }
+
+    /**
+     * Check if product is on sale.
+     */
+    public function getIsOnSaleAttribute(): bool
+    {
+        return $this->hasDiscount();
+    }
 
     /**
      * Check if product is published.

@@ -33,8 +33,13 @@ class ProductForm
                     ->default(null)
                     ->columnSpanFull(),
                 FileUpload::make('images')
-                    ->default(null)
+                    ->label('Product Images')
+                    ->image()
                     ->multiple()
+                    ->reorderable()
+                    ->disk('public')
+                    ->directory('products')
+                    ->default(null)
                     ->columnSpanFull(),
                 TagsInput::make('tags')
                     ->default(null)

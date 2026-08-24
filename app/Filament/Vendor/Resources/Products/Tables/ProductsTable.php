@@ -15,9 +15,21 @@ class ProductsTable
     {
         return $table
             ->columns([
-
+                ImageColumn::make('images')
+                    ->label('Image')
+                    ->disk('public')
+                    ->stacked()
+                    ->circular()
+                    ->limit(3)
+                    ->limitedRemainingText(),
                 TextColumn::make('name')
                     ->limit(50)
+                    ->searchable()
+                    ->sortable()
+                    ->weight('medium'),
+                TextColumn::make('category.name')
+                    ->label('Category')
+                    ->sortable()
                     ->searchable(),
                 TextColumn::make('price')
                     ->prefix('NRs.')
@@ -26,16 +38,15 @@ class ProductsTable
                     ->prefix('NRs.')
                     ->sortable(),
                 TextColumn::make('stock_qty')
+                    ->label('Stock')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge(),
                 TextColumn::make('avg_rating')
+                    ->label('Rating')
                     ->numeric()
                     ->sortable(),
-                ImageColumn::make('images')
-                    ->circular()
-                    ->stacked(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

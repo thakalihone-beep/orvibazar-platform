@@ -1,4 +1,4 @@
-{{-- <!-- resources/views/components/category-card.blade.php -->
+<!-- resources/views/components/category-card.blade.php -->
 @props([
     'icon' => 'fa-tag',
     'name' => 'Category',
@@ -32,4 +32,4 @@
     .category-card:hover div:first-child i {
         color: var(--color-primary) !important;
     }
-</style> --}}
+</style>

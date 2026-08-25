@@ -1,4 +1,4 @@
-<!-- resources/views/components/category-card.blade.php -->
+ <!-- resources/views/components/category-card.blade.php -->
 @props([
     'icon' => 'fa-tag',
     'name' => 'Category',
@@ -33,3 +33,39 @@
         color: var(--color-primary) !important;
     }
 </style>
+
+
+
+{{-- resources/views/components/category-card.blade.php
+@props([
+    'icon' => 'fa-tag',
+    'name' => 'Category',
+    'count' => '0',
+    'link' => '#',
+])
+
+<a href="{{ $link }}" style="text-decoration: none; color: inherit;">
+    <div style="background: var(--color-bg-card); padding: var(--spacing-lg); border-radius: var(--radius-lg); text-align: center; box-shadow: var(--shadow-sm); transition: all var(--transition-base); border: 2px solid transparent; cursor: pointer;">
+        <div style="font-size: 36px; color: var(--color-accent); margin-bottom: var(--spacing-sm);">
+            <i class="fas {{ $icon }}"></i>
+        </div>
+        <h3 style="font-size: var(--font-size-md); font-weight: var(--font-weight-semibold); margin: var(--spacing-xs) 0;">{{ $name }}</h3>
+        <p style="color: var(--color-text-muted); font-size: var(--font-size-sm); margin: 0;">{{ $count }} Products</p>
+    </div>
+</a>
+
+<style>
+    /* Add hover effect inline since we can't use CSS classes easily */
+    document.querySelectorAll('[style*="category-card"]')?.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            el.style.transform = 'translateY(-4px)';
+            el.style.boxShadow = 'var(--shadow-hover)';
+            el.style.borderColor = 'var(--color-accent)';
+        });
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = 'translateY(0)';
+            el.style.boxShadow = 'var(--shadow-sm)';
+            el.style.borderColor = 'transparent';
+        });
+    });
+</style> --}}

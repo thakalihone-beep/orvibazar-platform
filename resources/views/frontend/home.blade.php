@@ -69,19 +69,19 @@
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--spacing-lg);">
                 @forelse($categories ?? [] as $category)
-                    <x-category_card
+                    <x-category-card
                         icon="{{ $category->icon ?? 'fa-tag' }}"
                         name="{{ $category->name }}"
                         count="{{ number_format($category->products_count ?? 0) }}"
                         link="{{ route('category.show', $category->slug) }}"
                     />
                 @empty
-                    <x-category_card icon="fa-laptop" name="Electronics" count="1,234" />
-                    <x-category_card icon="fa-tshirt" name="Fashion" count="856" />
-                    <x-category_card icon="fa-home" name="Home & Living" count="542" />
-                    <x-category_card icon="fa-spa" name="Beauty" count="321" />
-                    <x-category_card icon="fa-dumbbell" name="Sports" count="234" />
-                    <x-category_card icon="fa-book" name="Books" count="789" />
+                    <x-category-card icon="fa-laptop" name="Electronics" count="1,234" />
+                    <x-category-card icon="fa-tshirt" name="Fashion" count="856" />
+                    <x-category-card icon="fa-home" name="Home & Living" count="542" />
+                    <x-category-card icon="fa-spa" name="Beauty" count="321" />
+                    <x-category-card icon="fa-dumbbell" name="Sports" count="234" />
+                    <x-category-card icon="fa-book" name="Books" count="789" />
                 @endforelse
             </div>
         </div>
@@ -115,7 +115,7 @@
                         product_id="{{ $product->id }}"
                     />
                 @empty
-                    <x-product_card
+                    <x-product-card
                         image="https://via.placeholder.com/300x300/1a1a1a/ffffff?text=Headphones"
                         title="Wireless Bluetooth Headphones"
                         price="129.99"
@@ -125,7 +125,7 @@
                         stock="in-stock"
                         sale="true"
                     />
-                    <x-product_card
+                    <x-product-card
                         image="https://via.placeholder.com/300x300/2d2d2d/ffffff?text=Watch"
                         title="Smart Fitness Tracker Watch"
                         price="49.99"
@@ -135,7 +135,7 @@
                         stock="in-stock"
                         sale="false"
                     />
-                    <x-product_card
+                    <x-product-card
                         image="https://via.placeholder.com/300x300/3d3d3d/ffffff?text=T-Shirt"
                         title="Organic Cotton T-Shirt (Pack of 3)"
                         price="39.99"
@@ -145,7 +145,7 @@
                         stock="low-stock"
                         sale="true"
                     />
-                    <x-product_card
+                    <x-product-card
                         image="https://via.placeholder.com/300x300/4d4d4d/ffffff?text=Lamp"
                         title="Modern LED Desk Lamp"
                         price="34.99"
@@ -155,7 +155,7 @@
                         stock="in-stock"
                         sale="false"
                     />
-                    <x-product_card
+                    <x-product-card
                         image="https://via.placeholder.com/300x300/5d5d5d/ffffff?text=Bag"
                         title="Leather Crossbody Bag"
                         price="89.99"
@@ -165,7 +165,7 @@
                         stock="out-of-stock"
                         sale="true"
                     />
-                    <x-product_card
+                    <x-product-card
                         image="https://via.placeholder.com/300x300/6d6d6d/ffffff?text=Shoes"
                         title="Running Shoes - Men's"
                         price="89.99"

@@ -36,10 +36,13 @@ Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('car
 Route::post('/checkout/now', [CheckoutController::class, 'now'])->name('checkout.now');
 
 
+
 // Wishlist Routes
 Route::prefix('wishlist')->name('wishlist.')->group(function () {
     Route::get('/', [WishlistController::class, 'index'])->name('index');
     Route::post('/toggle', [WishlistController::class, 'toggle'])->name('toggle');
     Route::post('/add/{productId}', [WishlistController::class, 'add'])->name('add');
     Route::delete('/remove/{productId}', [WishlistController::class, 'remove'])->name('remove');
+    Route::delete('/clear', [WishlistController::class, 'clear'])->name('clear');
+    Route::get('/count', [WishlistController::class, 'getCount'])->name('count');
 });

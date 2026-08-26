@@ -5,23 +5,24 @@
 <div class="container" style="max-width: var(--container-max); margin: 0 auto; padding: 0 var(--container-padding);">
 
     {{-- Breadcrumb --}}
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="{{ route('home') }}">Home</a>
+    <nav class="breadcrumb" aria-label="Breadcrumb" style="padding: var(--spacing-md) 0; display: flex; gap: var(--spacing-xs); font-size: var(--font-size-sm); color: var(--color-text-muted);">
+        <a href="{{ route('home') }}" style="color: var(--color-text-muted); text-decoration: none;">Home</a>
         <span class="separator">/</span>
-        <a href="{{ route('shop') }}">Shop</a>
+        <a href="{{ route('shop') }}" style="color: var(--color-text-muted); text-decoration: none;">Shop</a>
         <span class="separator">/</span>
         @if($product->category)
-            <a href="{{ route('category.show', $product->category->slug) }}">{{ $product->category->name }}</a>
+            <a href="{{ route('category.show', $product->category->slug) }}" style="color: var(--color-text-muted); text-decoration: none;">{{ $product->category->name }}</a>
             <span class="separator">/</span>
         @endif
-        <span class="current">{{ $product->name }}</span>
+        <span class="current" style="color: var(--color-text-primary);">{{ $product->name }}</span>
     </nav>
 
     {{-- Product Detail --}}
-    <div class="product-detail">
+    <div class="product-detail" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-2xl); padding: var(--spacing-xl) 0;">
+
         {{-- Gallery --}}
         <div class="gallery">
-            <div class="main-image">
+            <div class="main-image" style="position: relative; background: var(--color-bg-light); border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 1;">
                 @php
                     $images = $product->images ?? [];
                     $firstImage = is_array($images) && count($images) > 0 ? $images[0] : null;
@@ -30,16 +31,62 @@
                     src="{{ $firstImage ? asset('storage/' . $firstImage) : 'https://via.placeholder.com/600x600/1a1a1a/ffffff?text=' . urlencode($product->name) }}"
                     alt="{{ $product->name }}"
                     id="mainProductImage"
+                    style="width: 100%; height: 100%; object-fit: cover;"
                 >
+
+                {{-- Wishlist Button on Product Page --}}
+                @php
+                    $inWishlist = false;
+                    if (Auth::check()) {
+                        $inWishlist = \App\Models\Wishlist::where('user_id', Auth::id())
+                            ->where('product_id', $product->id)
+                            ->exists();
+                    } else {
+                        $wishlist = Session::get('wishlist', []);
+                        $inWishlist = in_array($product->id, $wishlist);
+                    }
+                @endphp
+                <button
+                    onclick="toggleWishlistProduct({{ $product->id }}, this)"
+                    class="wishlist-btn {{ $inWishlist ? 'active' : '' }}"
+                    style="
+                        position: absolute;
+                        top: var(--spacing-md);
+                        right: var(--spacing-md);
+                        background: white;
+                        border: none;
+                        border-radius: 50%;
+                        width: 48px;
+                        height: 48px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        transition: all var(--transition-base);
+                        z-index: 10;
+                        box-shadow: var(--shadow-md);
+                        color: {{ $inWishlist ? '#e74c3c' : 'var(--color-text-muted)' }};
+                        font-size: 22px;
+                    "
+                    onmouseenter="this.style.transform='scale(1.1)'; this.style.boxShadow='var(--shadow-lg)';"
+                    onmouseleave="this.style.transform='scale(1)'; this.style.boxShadow='var(--shadow-md)';"
+                    aria-label="Toggle wishlist"
+                >
+                    <i class="{{ $inWishlist ? 'fas' : 'far' }} fa-heart"></i>
+                </button>
             </div>
+
             @if(is_array($images) && count($images) > 1)
-                <div class="thumbnails">
+                <div class="thumbnails" style="display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-md); overflow-x: auto; padding-bottom: var(--spacing-sm);">
                     @foreach($images as $index => $image)
                         <img
                             src="{{ asset('storage/' . $image) }}"
                             alt="{{ $product->name }} - Image {{ $index + 1 }}"
                             class="{{ $index === 0 ? 'active' : '' }}"
                             onclick="changeMainImage(this)"
+                            style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-sm); cursor: pointer; border: 2px solid {{ $index === 0 ? 'var(--color-accent)' : 'transparent' }}; transition: all var(--transition-fast);"
+                            onmouseenter="this.style.borderColor='var(--color-accent)'"
+                            onmouseleave="this.style.borderColor='{{ $index === 0 ? 'var(--color-accent)' : 'transparent' }}'"
                         >
                     @endforeach
                 </div>
@@ -48,28 +95,27 @@
 
         {{-- Product Info --}}
         <div class="product-info">
-            <h1 class="product-name">{{ $product->name }}</h1>
+            <h1 class="product-name" style="font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); margin-bottom: var(--spacing-sm);">{{ $product->name }}</h1>
 
             {{-- Rating --}}
             <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-sm);">
-                <div class="stars">
+                <div class="stars" style="display: flex; gap: 2px;">
                     @for($i = 1; $i <= 5; $i++)
-                        <span class="star {{ $i <= round($product->avg_rating ?? 0) ? 'filled' : '' }}">★</span>
+                        <span class="star" style="color: {{ $i <= round($product->avg_rating ?? 0) ? 'var(--color-star)' : 'var(--color-star-empty)' }}; font-size: var(--font-size-lg);">★</span>
                     @endfor
                 </div>
-                <span class="rating-text">
-                    ({{ number_format($product->avg_rating ?? 0, 1) }} / 5 •
-                    {{ $product->reviews_count ?? 0 }} reviews)
+                <span class="rating-text" style="font-size: var(--font-size-sm); color: var(--color-text-muted);">
+                    ({{ number_format($product->avg_rating ?? 0, 1) }} / 5 • {{ $product->reviews_count ?? 0 }} reviews)
                 </span>
             </div>
 
             {{-- Price --}}
             <div style="margin: var(--spacing-md) 0;">
                 @if($product->discount_price && $product->discount_price < $product->price)
-                    <span class="product-price" style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-sale);">
+                    <span style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-sale);">
                         NRs. {{ number_format($product->discount_price, 2) }}
                     </span>
-                    <span class="original-price" style="font-size: var(--font-size-lg); color: var(--color-text-muted); text-decoration: line-through; margin-left: var(--spacing-sm);">
+                    <span style="font-size: var(--font-size-lg); color: var(--color-text-muted); text-decoration: line-through; margin-left: var(--spacing-sm);">
                         NRs. {{ number_format($product->price, 2) }}
                     </span>
                     @php
@@ -79,7 +125,7 @@
                         Save {{ $discountPercent }}%
                     </span>
                 @else
-                    <span class="product-price" style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold);">
+                    <span style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold);">
                         NRs. {{ number_format($product->price, 2) }}
                     </span>
                 @endif
@@ -103,16 +149,16 @@
             </div>
 
             {{-- Description --}}
-            <div class="product-description">
+            <div class="product-description" style="margin: var(--spacing-md) 0;">
                 <h3 style="font-size: var(--font-size-md); font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-sm);">Description</h3>
-                <p>{{ $product->description ?? 'No description available.' }}</p>
+                <p style="color: var(--color-text-secondary); line-height: var(--line-height-loose);">{{ $product->description ?? 'No description available.' }}</p>
             </div>
 
             {{-- Tags --}}
             @if($product->tags && is_array($product->tags) && count($product->tags) > 0)
                 <div style="margin: var(--spacing-md) 0; display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
                     @foreach($product->tags as $tag)
-                        <span style="background: var(--color-off-white); padding: 4px 12px; border-radius: var(--radius-full); font-size: var(--font-size-xs);">
+                        <span style="background: var(--color-off-white); padding: 4px 12px; border-radius: var(--radius-full); font-size: var(--font-size-xs); color: var(--color-text-muted);">
                             #{{ $tag }}
                         </span>
                     @endforeach
@@ -120,23 +166,27 @@
             @endif
 
             {{-- Quantity & Add to Cart --}}
-            <form action="{{ route('cart.add') }}" method="POST" style="margin-top: var(--spacing-lg);">
+            <form action="{{ route('cart.add') }}" method="POST" style="margin-top: var(--spacing-lg);" onsubmit="return handleAddToCart(event)">
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
 
                 <div style="display: flex; align-items: center; gap: var(--spacing-md); flex-wrap: wrap;">
-                    <div class="quantity-selector">
-                        <button type="button" onclick="decrementQuantity()">−</button>
-                        <input type="number" name="quantity" class="qty-input" value="1" min="1" max="{{ $product->stock_qty }}" id="quantityInput">
-                        <button type="button" onclick="incrementQuantity()">+</button>
+                    <div class="quantity-selector" style="display: flex; align-items: center; border: 2px solid var(--color-border-light); border-radius: var(--radius-md); overflow: hidden;">
+                        <button type="button" onclick="decrementQuantity()" style="background: var(--color-bg-light); border: none; padding: 8px 16px; font-size: var(--font-size-lg); cursor: pointer; transition: background var(--transition-fast);" onmouseenter="this.style.background='var(--color-off-white)'" onmouseleave="this.style.background='var(--color-bg-light)'">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" name="quantity" class="qty-input" value="1" min="1" max="{{ $product->stock_qty }}" id="quantityInput" style="width: 60px; text-align: center; border: none; padding: 8px 0; font-size: var(--font-size-base); font-weight: var(--font-weight-semibold);">
+                        <button type="button" onclick="incrementQuantity()" style="background: var(--color-bg-light); border: none; padding: 8px 16px; font-size: var(--font-size-lg); cursor: pointer; transition: background var(--transition-fast);" onmouseenter="this.style.background='var(--color-off-white)'" onmouseleave="this.style.background='var(--color-bg-light)'">
+                            <i class="fas fa-plus"></i>
+                        </button>
                     </div>
 
                     @if($product->stock_qty > 0)
-                        <button type="submit" class="btn-accent" style="flex: 1; justify-content: center;">
+                        <button type="submit" class="btn-accent" style="flex: 1; justify-content: center; padding: 12px 24px; background: var(--color-accent); color: var(--color-primary); border: none; border-radius: var(--radius-md); font-weight: var(--font-weight-bold); cursor: pointer; transition: all var(--transition-fast); display: flex; align-items: center; gap: var(--spacing-sm); font-size: var(--font-size-base);" onmouseenter="this.style.transform='scale(1.02)'; this.style.boxShadow='var(--shadow-md)'" onmouseleave="this.style.transform='scale(1)'; this.style.boxShadow='none'">
                             <i class="fas fa-shopping-cart"></i> Add to Cart
                         </button>
                     @else
-                        <button type="button" class="btn-secondary" style="flex: 1; justify-content: center; cursor: not-allowed; opacity: 0.6;" disabled>
+                        <button type="button" class="btn-secondary" style="flex: 1; justify-content: center; cursor: not-allowed; opacity: 0.6; padding: 12px 24px; background: var(--color-bg-light); border: 2px solid var(--color-border-light); border-radius: var(--radius-md); font-weight: var(--font-weight-bold); color: var(--color-text-muted); display: flex; align-items: center; gap: var(--spacing-sm);" disabled>
                             <i class="fas fa-times-circle"></i> Out of Stock
                         </button>
                     @endif
@@ -149,7 +199,7 @@
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     <input type="hidden" name="quantity" value="1" id="buyNowQuantity">
-                    <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; background: var(--color-primary);">
+                    <button type="submit" style="width: 100%; justify-content: center; padding: 14px; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-md); font-weight: var(--font-weight-bold); cursor: pointer; transition: all var(--transition-fast); display: flex; align-items: center; gap: var(--spacing-sm); font-size: var(--font-size-base);" onmouseenter="this.style.opacity='0.8'; this.style.transform='scale(1.01)'" onmouseleave="this.style.opacity='1'; this.style.transform='scale(1)'">
                         <i class="fas fa-bolt"></i> Buy Now
                     </button>
                 </form>
@@ -160,7 +210,7 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); font-size: var(--font-size-sm); color: var(--color-text-muted);">
                     <div>
                         <strong>Category:</strong>
-                        <a href="{{ route('category.show', $product->category->slug ?? '#') }}" style="color: var(--color-primary);">
+                        <a href="{{ route('category.show', $product->category->slug ?? '#') }}" style="color: var(--color-primary); text-decoration: none;">
                             {{ $product->category->name ?? 'Uncategorized' }}
                         </a>
                     </div>
@@ -189,6 +239,17 @@
             </h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--spacing-lg);">
                 @foreach($relatedProducts as $related)
+                    @php
+                        $relatedInWishlist = false;
+                        if (Auth::check()) {
+                            $relatedInWishlist = \App\Models\Wishlist::where('user_id', Auth::id())
+                                ->where('product_id', $related->id)
+                                ->exists();
+                        } else {
+                            $wishlist = Session::get('wishlist', []);
+                            $relatedInWishlist = in_array($related->id, $wishlist);
+                        }
+                    @endphp
                     <x-product-card
                         :product="$related"
                         image="{{ is_array($related->images) && count($related->images) > 0 ? asset('storage/' . $related->images[0]) : 'https://via.placeholder.com/300x300/1a1a1a/ffffff?text=' . urlencode($related->name) }}"
@@ -201,6 +262,7 @@
                         sale="{{ $related->discount_price && $related->discount_price < $related->price }}"
                         link="{{ route('product.show', $related->slug) }}"
                         product_id="{{ $related->id }}"
+                        :in_wishlist="$relatedInWishlist"
                     />
                 @endforeach
             </div>
@@ -237,14 +299,14 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="stars">
+                                <div class="stars" style="display: flex; gap: 2px;">
                                     @for($i = 1; $i <= 5; $i++)
-                                        <span class="star {{ $i <= $review->rating ? 'filled' : '' }}">★</span>
+                                        <span class="star" style="color: {{ $i <= $review->rating ? 'var(--color-star)' : 'var(--color-star-empty)' }}; font-size: var(--font-size-sm);">★</span>
                                     @endfor
                                 </div>
                             </div>
                         </div>
-                        <p style="color: var(--color-text-secondary); line-height: var(--line-height-loose);">
+                        <p style="color: var(--color-text-secondary); line-height: var(--line-height-loose); margin: 0;">
                             "{{ $review->comment }}"
                         </p>
                     </div>
@@ -261,20 +323,129 @@
 
 @push('scripts')
 <script>
-// Change main image on thumbnail click
-function changeMainImage(element) {
-    // Update main image
-    const mainImage = document.getElementById('mainProductImage');
-    mainImage.src = element.src;
+// ============================================
+// PRODUCT PAGE WISHLIST TOGGLE
+// ============================================
+function toggleWishlistProduct(productId, buttonElement) {
+    if (!productId) {
+        showNotification('Product ID is required', 'error');
+        return;
+    }
 
-    // Update active state
-    document.querySelectorAll('.thumbnails img').forEach(img => {
-        img.classList.remove('active');
+    // Toggle UI immediately for better UX
+    const isActive = buttonElement.classList.toggle('active');
+    const icon = buttonElement.querySelector('i');
+    if (icon) {
+        icon.classList.toggle('far');
+        icon.classList.toggle('fas');
+    }
+
+    // Update button color
+    if (isActive) {
+        buttonElement.style.color = '#e74c3c';
+    } else {
+        buttonElement.style.color = 'var(--color-text-muted)';
+    }
+
+    // Animate the button
+    buttonElement.style.transform = 'scale(1.3)';
+    setTimeout(() => {
+        buttonElement.style.transform = 'scale(1)';
+    }, 200);
+
+    // Send request to server
+    fetch('{{ route('wishlist.toggle') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            product_id: productId,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const message = data.action === 'added'
+                ? 'Added to wishlist!'
+                : 'Removed from wishlist!';
+            showNotification(message, 'success');
+
+            // Update wishlist count in navbar
+            if (data.wishlist_count !== undefined) {
+                const wishlistCount = document.getElementById('wishlistCount');
+                if (wishlistCount) {
+                    wishlistCount.textContent = data.wishlist_count;
+                    if (data.wishlist_count === 0) {
+                        wishlistCount.style.display = 'none';
+                    } else {
+                        wishlistCount.style.display = 'inline';
+                    }
+                }
+
+                const mobileWishlistCount = document.getElementById('mobileWishlistCount');
+                if (mobileWishlistCount) {
+                    mobileWishlistCount.textContent = data.wishlist_count;
+                    if (data.wishlist_count === 0) {
+                        mobileWishlistCount.style.display = 'none';
+                    } else {
+                        mobileWishlistCount.style.display = 'inline';
+                    }
+                }
+            }
+        } else {
+            // Revert UI if failed
+            buttonElement.classList.toggle('active');
+            if (icon) {
+                icon.classList.toggle('far');
+                icon.classList.toggle('fas');
+            }
+            if (buttonElement.classList.contains('active')) {
+                buttonElement.style.color = '#e74c3c';
+            } else {
+                buttonElement.style.color = 'var(--color-text-muted)';
+            }
+            showNotification(data.message || 'Failed to update wishlist', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Revert UI if failed
+        buttonElement.classList.toggle('active');
+        if (icon) {
+            icon.classList.toggle('far');
+            icon.classList.toggle('fas');
+        }
+        if (buttonElement.classList.contains('active')) {
+            buttonElement.style.color = '#e74c3c';
+        } else {
+            buttonElement.style.color = 'var(--color-text-muted)';
+        }
+        showNotification('An error occurred. Please try again.', 'error');
     });
-    element.classList.add('active');
 }
 
-// Quantity controls
+// ============================================
+// CHANGE MAIN IMAGE
+// ============================================
+function changeMainImage(element) {
+    const mainImage = document.getElementById('mainProductImage');
+    if (mainImage) {
+        mainImage.src = element.src;
+    }
+    document.querySelectorAll('.thumbnails img').forEach(img => {
+        img.classList.remove('active');
+        img.style.borderColor = 'transparent';
+    });
+    element.classList.add('active');
+    element.style.borderColor = 'var(--color-accent)';
+}
+
+// ============================================
+// QUANTITY CONTROLS
+// ============================================
 function incrementQuantity() {
     const input = document.getElementById('quantityInput');
     const max = parseInt(input.getAttribute('max')) || 999;
@@ -297,12 +468,119 @@ function decrementQuantity() {
 function updateBuyNowQuantity() {
     const qtyInput = document.getElementById('quantityInput');
     const buyNowQty = document.getElementById('buyNowQuantity');
-    if (buyNowQty) {
+    if (buyNowQty && qtyInput) {
         buyNowQty.value = qtyInput.value;
     }
 }
 
-// Prevent negative values in quantity input
+// ============================================
+// HANDLE ADD TO CART WITH QUANTITY
+// ============================================
+function handleAddToCart(event) {
+    const form = event.target;
+    const qtyInput = document.getElementById('quantityInput');
+    if (qtyInput) {
+        // Update or add quantity field
+        let qtyField = form.querySelector('input[name="quantity"]');
+        if (!qtyField) {
+            qtyField = document.createElement('input');
+            qtyField.type = 'hidden';
+            qtyField.name = 'quantity';
+            form.appendChild(qtyField);
+        }
+        qtyField.value = qtyInput.value;
+    }
+    return true;
+}
+
+// ============================================
+// NOTIFICATION SYSTEM
+// ============================================
+function showNotification(message, type = 'success') {
+    const existing = document.querySelectorAll('.custom-notification');
+    existing.forEach(el => el.remove());
+
+    const colors = {
+        success: '#2ecc71',
+        error: '#e74c3c',
+        warning: '#f39c12',
+        info: '#3498db',
+    };
+
+    const notification = document.createElement('div');
+    notification.className = 'custom-notification';
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 16px 24px;
+        background: ${colors[type] || '#333'};
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 99999;
+        animation: slideIn 0.3s ease;
+        font-weight: 500;
+        max-width: 400px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: system-ui, -apple-system, sans-serif;
+    `;
+
+    const icons = {
+        success: '✓',
+        error: '✕',
+        warning: '⚠',
+        info: 'ℹ',
+    };
+
+    notification.innerHTML = `
+        <span style="font-size: 20px; font-weight: bold;">${icons[type] || 'ℹ'}</span>
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()" style="background: none; border: none; color: white; cursor: pointer; font-size: 18px; margin-left: auto; padding: 0 4px;">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }
+    }, 4000);
+}
+
+// Add animation styles if not exists
+if (!document.getElementById('notification-styles')) {
+    const style = document.createElement('style');
+    style.id = 'notification-styles';
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        .wishlist-btn:hover {
+            background: #ff6b6b !important;
+            color: white !important;
+        }
+        .wishlist-btn.active {
+            background: #e74c3c !important;
+            color: white !important;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// ============================================
+// INITIALIZE QUANTITY ON PAGE LOAD
+// ============================================
 document.addEventListener('DOMContentLoaded', function() {
     const qtyInput = document.getElementById('quantityInput');
     if (qtyInput) {
@@ -314,18 +592,6 @@ document.addEventListener('DOMContentLoaded', function() {
             this.value = value;
             updateBuyNowQuantity();
         });
-    }
-});
-
-// Add to cart with quantity
-document.querySelector('form[action*="cart.add"]')?.addEventListener('submit', function(e) {
-    const qty = document.getElementById('quantityInput');
-    if (qty) {
-        const hiddenQty = document.createElement('input');
-        hiddenQty.type = 'hidden';
-        hiddenQty.name = 'quantity';
-        hiddenQty.value = qty.value;
-        this.appendChild(hiddenQty);
     }
 });
 </script>

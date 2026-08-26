@@ -846,3 +846,18 @@ img {
         padding: 6px 12px;
     }
 }
+
+/* Wishlist count badge styles */
+#wishlistCount {
+    transition: all var(--transition-base);
+}
+
+#wishlistCount.empty {
+    display: none;
+}
+
+/* Mobile wishlist count */
+#mobileWishlistCount {
+    min-width: 20px;
+    text-align: center;
+}

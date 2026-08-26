@@ -407,4 +407,8 @@ class CartController extends Controller
         $cart = Session::get('cart', []);
         return $cart[$productId]['quantity'] ?? 0;
     }
+
+
+    
 }
+

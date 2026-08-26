@@ -92,6 +92,7 @@ class PageController extends Controller
         return view('frontend.products.show', compact('product', 'relatedProducts'));
     }
 
+    // category page
     public function categories()
     {
         $categories = Category::where('is_active', true)
@@ -101,6 +102,9 @@ class PageController extends Controller
         return view('frontend.categories.index', compact('categories'));
     }
 
+    /**
+     * Category show page
+     */
     public function categoryShow(string $slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
@@ -111,12 +115,13 @@ class PageController extends Controller
             ->latest()
             ->paginate(12);
 
-        $categories = Category::where('is_active', true)->withCount('products')->get();
+        $categories = Category::where('is_active', true)
+            ->withCount('products')
+            ->get();
 
         return view('frontend.products.index', compact('products', 'categories', 'category'));
     }
-
-    public function sale()
+     public function sale()
     {
         $products = Product::where('status', 'published')
             ->whereNotNull('discount_price')
@@ -125,8 +130,11 @@ class PageController extends Controller
             ->latest()
             ->paginate(12);
 
-        $categories = Category::where('is_active', true)->withCount('products')->get();
+        $categories = Category::where('is_active', true)
+            ->withCount('products')
+            ->get();
 
         return view('frontend.products.index', compact('products', 'categories'));
     }
+
 }

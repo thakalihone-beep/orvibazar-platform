@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Frontend\Authcontroller;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\RegisterController;
 use App\Http\Controllers\Frontend\WishlistController;
+
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -47,3 +49,9 @@ Route::prefix('wishlist')->name('wishlist.')->group(function () {
     Route::delete('/clear', [WishlistController::class, 'clear'])->name('clear');
     Route::get('/count', [WishlistController::class, 'getCount'])->name('count');
 });
+
+//login
+Route::get('/login',[Authcontroller::class, 'login'])->name('login');
+Route::get('/register',[Authcontroller::class, 'register'])->name('register');
+Route::post('/logout', [Authcontroller::class, 'logout'])->name('logout');
+

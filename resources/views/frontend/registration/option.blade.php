@@ -68,7 +68,7 @@
             </div>
 
             <!-- Button -->
-            <a href="{{ route('customer') }}" style="display: block; padding: 14px; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-md); font-weight: var(--font-weight-semibold); text-decoration: none; transition: all var(--transition-fast); text-align: center;">
+            <a href="{{ route('register') }}" style="display: block; padding: 14px; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-md); font-weight: var(--font-weight-semibold); text-decoration: none; transition: all var(--transition-fast); text-align: center;">
                 <i class="fas fa-user-plus"></i> Register as Customer
             </a>
         </div>

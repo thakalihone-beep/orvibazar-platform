@@ -101,7 +101,7 @@
         <!-- Guest User Actions -->
         <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
             <!-- Login Button -->
-            <a href="/login"
+            <a href="{{route('login')}}"
                 style="color: var(--color-text-light); text-decoration: none; font-size: var(--font-size-sm); padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--radius-md); transition: all var(--transition-fast); display: flex; align-items: center; gap: var(--spacing-xs);"
                 onmouseover="this.style.background='var(--color-primary-light)'"
                 onmouseout="this.style.background='transparent'">
@@ -191,7 +191,7 @@
 
         <!-- Guest Mobile Actions -->
         <div style="border-top: 1px solid var(--color-primary-light); padding-top: var(--spacing-md);">
-            <a href="/login"
+            <a href="{{route('login')}}"
                 style="display: block; color: var(--color-text-light); text-decoration: none; padding: var(--spacing-sm) 0; border-bottom: 1px solid var(--color-primary-light);">
                 <i class="fas fa-sign-in-alt" style="margin-right: var(--spacing-sm);"></i> Login
             </a>

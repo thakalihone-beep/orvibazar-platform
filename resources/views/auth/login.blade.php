@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('title', 'Login - OrviBazar')
 
 @section('content')
-<div style="min-height: 80vh; display: flex; align-items: center; justify-content: center; background: var(--color-bg-light); padding: var(--spacing-xl) var(--container-padding);">
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--color-bg-light); padding: var(--spacing-xl) var(--container-padding);">
     <div style="width: 100%; max-width: 440px;">
 
         <!-- Logo / Brand -->
@@ -47,7 +47,7 @@
             @endif
 
             <!-- Login Form -->
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('login.submit') }}">
                 @csrf
 
                 <!-- Email -->
@@ -61,6 +61,11 @@
                         onfocus="this.style.borderColor='var(--color-accent)'; this.style.boxShadow='0 0 0 3px rgba(232,168,56,0.15)'"
                         onblur="this.style.borderColor='var(--color-border-light)'; this.style.boxShadow='none'"
                         placeholder="your@email.com">
+                    @error('email')
+                        <div style="color: var(--color-error); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+                            <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <!-- Password -->
@@ -76,16 +81,21 @@
                             onblur="this.style.borderColor='var(--color-border-light)'; this.style.boxShadow='none'"
                             placeholder="Enter your password">
                         <button type="button" onclick="togglePassword()"
-                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--color-text-muted); cursor: pointer;">
+                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--color-text-muted); cursor: pointer; font-size: var(--font-size-base);">
                             <i class="fas fa-eye" id="passwordToggleIcon"></i>
                         </button>
                     </div>
+                    @error('password')
+                        <div style="color: var(--color-error); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+                            <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <!-- Remember Me & Forgot Password -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg);">
                     <label style="display: flex; align-items: center; gap: var(--spacing-sm); font-size: var(--font-size-sm); color: var(--color-text-muted); cursor: pointer;">
-                        <input type="checkbox" name="remember" style="accent-color: var(--color-accent); width: 16px; height: 16px; cursor: pointer;">
+                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} style="accent-color: var(--color-accent); width: 16px; height: 16px; cursor: pointer;">
                         Remember me
                     </label>
                     <a href="#" style="font-size: var(--font-size-sm); color: var(--color-accent); text-decoration: none; font-weight: var(--font-weight-medium);">
@@ -110,7 +120,7 @@
                 <div style="flex: 1; height: 1px; background: var(--color-border-light);"></div>
             </div>
 
-            <!-- Google Login Option (as anchor tag) -->
+            <!-- Google Login Option -->
             <a href="{{ url('auth/google') }}"
                 style="display: flex; align-items: center; justify-content: center; gap: var(--spacing-md); width: 100%; padding: 12px; background: white; border: 2px solid var(--color-border-light); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text-primary); font-weight: var(--font-weight-medium); transition: all var(--transition-fast);"
                 onmouseover="this.style.background='var(--color-off-white)'; this.style.borderColor='var(--color-accent)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)'"
@@ -150,19 +160,4 @@ function togglePassword() {
     }
 }
 </script>
-
-<style>
-/* Additional animations and styles */
-form input:focus {
-    outline: none;
-}
-
-button:active {
-    transform: scale(0.98) !important;
-}
-
-a:active {
-    transform: scale(0.98) !important;
-}
-</style>
 @endsection

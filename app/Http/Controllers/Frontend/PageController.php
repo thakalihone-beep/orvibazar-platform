@@ -121,7 +121,8 @@ class PageController extends Controller
 
         return view('frontend.products.index', compact('products', 'categories', 'category'));
     }
-     public function sale()
+
+    public function sale()
     {
         $products = Product::where('status', 'published')
             ->whereNotNull('discount_price')
@@ -137,4 +138,17 @@ class PageController extends Controller
         return view('frontend.products.index', compact('products', 'categories'));
     }
 
+    public function profile()
+    {
+        return view('frontend.profile.index', [
+            'user' => auth()->user(),
+        ]);
+    }
+
+    public function orders()
+    {
+        return view('frontend.orders.index', [
+            'user' => auth()->user(),
+        ]);
+    }
 }

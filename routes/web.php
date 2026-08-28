@@ -6,12 +6,7 @@ use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\RegisterController;
 use App\Http\Controllers\Frontend\WishlistController;
-
 use Illuminate\Support\Facades\Route;
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/shop', [PageController::class, 'shop'])->name('shop');
@@ -38,8 +33,6 @@ Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.u
 Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/checkout/now', [CheckoutController::class, 'now'])->name('checkout.now');
 
-
-
 // Wishlist Routes
 Route::prefix('wishlist')->name('wishlist.')->group(function () {
     Route::get('/', [WishlistController::class, 'index'])->name('index');
@@ -50,8 +43,21 @@ Route::prefix('wishlist')->name('wishlist.')->group(function () {
     Route::get('/count', [WishlistController::class, 'getCount'])->name('count');
 });
 
-//login
-Route::get('/login',[Authcontroller::class, 'login'])->name('login');
-Route::get('/register',[Authcontroller::class, 'register'])->name('register');
+// login
+Route::get('/login', [Authcontroller::class, 'login'])->name('login');
+Route::get('/register', [Authcontroller::class, 'register'])->name('register');
+
+Route::post('/login', [Authcontroller::class, 'loginSubmit'])->name('login.submit');
+Route::post('/register', [Authcontroller::class, 'registerSubmit'])->name('register.submit');
+
+// Logout
 Route::post('/logout', [Authcontroller::class, 'logout'])->name('logout');
 
+// Authenticated user routes
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [PageController::class, 'profile'])->name('profile');
+    Route::get('/orders', [PageController::class, 'orders'])->name('orders.index');
+});
+
+// Cart count (JSON for JS updates)
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');

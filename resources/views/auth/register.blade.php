@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('title', 'Register - OrviBazar')
 
 @section('content')
-<div style="min-height: 80vh; display: flex; align-items: center; justify-content: center; background: var(--color-bg-light); padding: var(--spacing-xl) var(--container-padding);">
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--color-bg-light); padding: var(--spacing-xl) var(--container-padding);">
     <div style="width: 100%; max-width: 480px;">
 
         <!-- Logo / Brand -->
@@ -47,7 +47,7 @@
             @endif
 
             <!-- Register Form -->
-            <form method="POST" action="{{ route('register') }}">
+            <form method="POST" action="{{ route('register.submit') }}">
                 @csrf
 
                 <!-- Name -->
@@ -61,6 +61,11 @@
                         onfocus="this.style.borderColor='var(--color-accent)'; this.style.boxShadow='0 0 0 3px rgba(232,168,56,0.15)'"
                         onblur="this.style.borderColor='var(--color-border-light)'; this.style.boxShadow='none'"
                         placeholder="John Doe">
+                    @error('name')
+                        <div style="color: var(--color-error); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+                            <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <!-- Email -->
@@ -74,6 +79,11 @@
                         onfocus="this.style.borderColor='var(--color-accent)'; this.style.boxShadow='0 0 0 3px rgba(232,168,56,0.15)'"
                         onblur="this.style.borderColor='var(--color-border-light)'; this.style.boxShadow='none'"
                         placeholder="your@email.com">
+                    @error('email')
+                        <div style="color: var(--color-error); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+                            <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <!-- Password -->
@@ -89,14 +99,20 @@
                             onblur="this.style.borderColor='var(--color-border-light)'; this.style.boxShadow='none'"
                             placeholder="At least 8 characters">
                         <button type="button" onclick="togglePassword()"
-                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--color-text-muted); cursor: pointer;">
+                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--color-text-muted); cursor: pointer; font-size: var(--font-size-base);">
                             <i class="fas fa-eye" id="passwordToggleIcon"></i>
                         </button>
                     </div>
-                    <div style="margin-top: var(--spacing-xs); font-size: var(--font-size-xs); color: var(--color-text-muted);">
+                    <div style="margin-top: var(--spacing-xs); display: flex; align-items: center; gap: var(--spacing-sm); font-size: var(--font-size-xs); color: var(--color-text-muted);">
                         <i class="fas fa-info-circle"></i>
-                        Must be at least 8 characters long
+                        <span>Must be at least 8 characters long</span>
+                        <span id="passwordStrength" style="font-weight: var(--font-weight-semibold); margin-left: auto;"></span>
                     </div>
+                    @error('password')
+                        <div style="color: var(--color-error); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+                            <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <!-- Confirm Password -->
@@ -115,7 +131,7 @@
                 <!-- Terms & Conditions -->
                 <div style="margin-bottom: var(--spacing-lg);">
                     <label style="display: flex; align-items: flex-start; gap: var(--spacing-sm); font-size: var(--font-size-sm); color: var(--color-text-muted); cursor: pointer;">
-                        <input type="checkbox" name="terms" required style="accent-color: var(--color-accent); width: 16px; height: 16px; cursor: pointer; margin-top: 2px;">
+                        <input type="checkbox" name="terms" {{ old('terms') ? 'checked' : '' }} style="accent-color: var(--color-accent); width: 16px; height: 16px; cursor: pointer; margin-top: 2px;">
                         <span>
                             I agree to the
                             <a href="#" style="color: var(--color-accent); text-decoration: none; font-weight: var(--font-weight-medium);">Terms of Service</a>
@@ -123,6 +139,11 @@
                             <a href="#" style="color: var(--color-accent); text-decoration: none; font-weight: var(--font-weight-medium);">Privacy Policy</a>
                         </span>
                     </label>
+                    @error('terms')
+                        <div style="color: var(--color-error); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+                            <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <!-- Register Button -->
@@ -142,7 +163,7 @@
                 <div style="flex: 1; height: 1px; background: var(--color-border-light);"></div>
             </div>
 
-            <!-- Google Register Option (as anchor tag) -->
+            <!-- Google Register Option -->
             <a href="{{ url('auth/google') }}"
                 style="display: flex; align-items: center; justify-content: center; gap: var(--spacing-md); width: 100%; padding: 12px; background: white; border: 2px solid var(--color-border-light); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text-primary); font-weight: var(--font-weight-medium); transition: all var(--transition-fast);"
                 onmouseover="this.style.background='var(--color-off-white)'; this.style.borderColor='var(--color-accent)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)'"
@@ -182,7 +203,7 @@ function togglePassword() {
     }
 }
 
-// Password strength indicator (optional)
+// Password strength indicator
 document.getElementById('password')?.addEventListener('input', function() {
     const password = this.value;
     const strength = document.getElementById('passwordStrength');
@@ -198,29 +219,8 @@ document.getElementById('password')?.addEventListener('input', function() {
     const messages = ['Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
     const colors = ['var(--color-error)', 'var(--color-warning)', 'var(--color-info)', 'var(--color-success)', 'var(--color-success)'];
 
-    strength.textContent = messages[score] || 'Weak';
-    strength.style.color = colors[score] || 'var(--color-error)';
+    strength.textContent = password.length > 0 ? messages[score] : '';
+    strength.style.color = password.length > 0 ? colors[score] : '';
 });
 </script>
-
-<style>
-/* Additional animations and styles */
-form input:focus {
-    outline: none;
-}
-
-button:active {
-    transform: scale(0.98) !important;
-}
-
-a:active {
-    transform: scale(0.98) !important;
-}
-
-/* Password strength indicator */
-#passwordStrength {
-    font-weight: var(--font-weight-semibold);
-    margin-left: var(--spacing-xs);
-}
-</style>
 @endsection

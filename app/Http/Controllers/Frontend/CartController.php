@@ -21,7 +21,7 @@ class CartController extends Controller
         $subtotal = 0;
         $discount = 0;
 
-        if (!empty($cart)) {
+        if (! empty($cart)) {
             // Get product details for each cart item
             $productIds = array_keys($cart);
             $products = Product::whereIn('id', $productIds)
@@ -88,6 +88,7 @@ class CartController extends Controller
                     'message' => $validator->errors()->first(),
                 ], 422);
             }
+
             return redirect()->back()->with('error', $validator->errors()->first());
         }
 
@@ -99,13 +100,14 @@ class CartController extends Controller
             ->where('status', 'published')
             ->first();
 
-        if (!$product) {
+        if (! $product) {
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Product not found or unavailable.',
                 ], 404);
             }
+
             return redirect()->back()->with('error', 'Product not found or unavailable.');
         }
 
@@ -114,10 +116,11 @@ class CartController extends Controller
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Not enough stock available. Only ' . $product->stock_qty . ' left.',
+                    'message' => 'Not enough stock available. Only '.$product->stock_qty.' left.',
                 ], 422);
             }
-            return redirect()->back()->with('error', 'Not enough stock available. Only ' . $product->stock_qty . ' left.');
+
+            return redirect()->back()->with('error', 'Not enough stock available. Only '.$product->stock_qty.' left.');
         }
 
         // Get current cart
@@ -131,10 +134,11 @@ class CartController extends Controller
                 if ($request->ajax()) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Cannot add more. Only ' . $product->stock_qty . ' available.',
+                        'message' => 'Cannot add more. Only '.$product->stock_qty.' available.',
                     ], 422);
                 }
-                return redirect()->back()->with('error', 'Cannot add more. Only ' . $product->stock_qty . ' available.');
+
+                return redirect()->back()->with('error', 'Cannot add more. Only '.$product->stock_qty.' available.');
             }
             $cart[$productId]['quantity'] = $newQuantity;
         } else {
@@ -177,6 +181,7 @@ class CartController extends Controller
                     'message' => $validator->errors()->first(),
                 ], 422);
             }
+
             return redirect()->back()->with('error', $validator->errors()->first());
         }
 
@@ -185,13 +190,14 @@ class CartController extends Controller
         // Get cart
         $cart = Session::get('cart', []);
 
-        if (!isset($cart[$productId])) {
+        if (! isset($cart[$productId])) {
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Item not found in cart.',
                 ], 404);
             }
+
             return redirect()->back()->with('error', 'Item not found in cart.');
         }
 
@@ -200,13 +206,14 @@ class CartController extends Controller
             ->where('status', 'published')
             ->first();
 
-        if (!$product) {
+        if (! $product) {
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Product not found.',
                 ], 404);
             }
+
             return redirect()->back()->with('error', 'Product not found.');
         }
 
@@ -215,10 +222,11 @@ class CartController extends Controller
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Not enough stock available. Only ' . $product->stock_qty . ' left.',
+                    'message' => 'Not enough stock available. Only '.$product->stock_qty.' left.',
                 ], 422);
             }
-            return redirect()->back()->with('error', 'Not enough stock available. Only ' . $product->stock_qty . ' left.');
+
+            return redirect()->back()->with('error', 'Not enough stock available. Only '.$product->stock_qty.' left.');
         }
 
         // Update quantity
@@ -304,6 +312,7 @@ class CartController extends Controller
         foreach ($cart as $item) {
             $count += $item['quantity'] ?? 0;
         }
+
         return $count;
     }
 
@@ -315,7 +324,7 @@ class CartController extends Controller
         $cart = Session::get('cart', []);
         $total = 0;
 
-        if (!empty($cart)) {
+        if (! empty($cart)) {
             $productIds = array_keys($cart);
             $products = Product::whereIn('id', $productIds)
                 ->where('status', 'published')
@@ -342,9 +351,10 @@ class CartController extends Controller
     private function getProductImage($product)
     {
         if ($product->images && is_array($product->images) && count($product->images) > 0) {
-            return asset('storage/' . $product->images[0]);
+            return asset('storage/'.$product->images[0]);
         }
-        return 'https://via.placeholder.com/300x300/1a1a1a/ffffff?text=' . urlencode($product->name);
+
+        return 'https://via.placeholder.com/300x300/1a1a1a/ffffff?text='.urlencode($product->name);
     }
 
     /**
@@ -356,7 +366,7 @@ class CartController extends Controller
         $cartItems = [];
         $total = 0;
 
-        if (!empty($cart)) {
+        if (! empty($cart)) {
             $productIds = array_keys($cart);
             $products = Product::whereIn('id', $productIds)
                 ->where('status', 'published')
@@ -396,6 +406,7 @@ class CartController extends Controller
     public function isInCart($productId)
     {
         $cart = Session::get('cart', []);
+
         return isset($cart[$productId]);
     }
 
@@ -405,10 +416,19 @@ class CartController extends Controller
     public function getItemQuantity($productId)
     {
         $cart = Session::get('cart', []);
+
         return $cart[$productId]['quantity'] ?? 0;
     }
 
+    /**
+     * Return the current cart item count as JSON (used by the navbar JS).
+     */
+    public function count()
+    {
+        $cart = Session::get('cart', []);
 
-    
+        return response()->json([
+            'cart_count' => count($cart),
+        ]);
+    }
 }
-
